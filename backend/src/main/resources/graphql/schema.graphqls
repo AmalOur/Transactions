@@ -1,0 +1,74 @@
+# Define the Enum for Account Type
+enum TypeCompte {
+    COURANT
+    EPARGNE
+}
+
+# Define the Enum for Transaction Type
+enum TypeTransaction {
+    DEPOT
+    RETRAIT
+}
+
+# Define the Account Type
+type Compte {
+    id: ID!
+    solde: Float!
+    dateCreation: String!
+    type: TypeCompte!
+}
+
+# Define the Input for Account Creation
+input CompteRequest {
+    solde: Float!
+    dateCreation: String!
+    type: TypeCompte!
+}
+
+# Define the Transaction Type
+type Transaction {
+    id: ID!
+    date: String!
+    type: TypeTransaction!
+    montant: Float!
+    compte: Compte!
+}
+
+# Define the Input for Transaction Creation
+input TransactionInput {
+    date: String!
+    type: TypeTransaction!
+    montant: Float!
+    compteId: ID!
+}
+
+# Define the Statistics Type for Account Balances
+type SoldeStats {
+    count: Int!      # Total number of accounts
+    sum: Float!      # Total balance sum
+    average: Float!  # Average balance
+}
+
+# Define Query Operations
+type Query {
+    # Fetch all accounts
+    allComptes: [Compte!]!
+
+    # Fetch account by ID
+    compteById(id: ID!): Compte
+
+    # Get total statistics for account balances
+    totalSolde: SoldeStats!
+
+    # Fetch all transactions
+    allTransactions: [Transaction!]!
+}
+
+# Define Mutation Operations
+type Mutation {
+    # Save a new account
+    saveCompte(compte: CompteRequest!): Compte!
+
+    # Save a new transaction
+    saveTransaction(transaction: TransactionInput!): Transaction!
+}
